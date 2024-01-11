@@ -16,7 +16,7 @@ class CreateSpecialistTable extends Migration
         Schema::create('specialist', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->string('image');
+            $table->string('image')->default('placeholder.png');
             $table->integer('user_id');
             $table->integer('category_id');
             $table->timestamps();

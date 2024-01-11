@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->integer('category_id');
-            $table->string('image');
+            $table->string('image')->default('placeholder.png');
             $table->timestamps();
         });
     }
