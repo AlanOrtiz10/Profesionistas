@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\categories;
+use App\Models\Category;
 
-class categoriesController extends Controller
+class CategoryController extends Controller
 {
     
     public function list() {
-        $categories =  categories::all();
+        $categories =  Category::all();
         $list = [];
         foreach($categories as $category) {
             $object = [
@@ -28,7 +28,7 @@ class categoriesController extends Controller
     }
 
     public function item($id) {
-        $categories =  categories::where('id', '=', $id)->first();
+        $categories =  Category::where('id', '=', $id)->first();
         $object = [
             "id" => $categories->id,
             "Nombre" => $categories->name,
@@ -47,7 +47,7 @@ class categoriesController extends Controller
             'description' => 'required|string',
             'image' => 'required|string'
         ]);
-        $category = categories::create([
+        $category = Category::create([
             'name'=>$data['name'],
             'description'=>$data['description'],
             'image'=>$data['image']
@@ -74,7 +74,7 @@ class categoriesController extends Controller
             'image' => 'required|string',
         ]);
 
-        $category =  categories::where('id', '=', $data['id'])->first();
+        $category =  Category::where('id', '=', $data['id'])->first();
 
         $category->name = $data['name'];
         $category->description = $data['description'];

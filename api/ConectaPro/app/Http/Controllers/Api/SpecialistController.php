@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\specialists;
+use App\Models\Specialist;
 
-class specialistsController extends Controller
+class SpecialistController extends Controller
 {
     
 
     public function list() {
-        $specialists =  specialists::all();
+        $specialists =  Specialist::all();
         $list = [];
         foreach($specialists as $specialist) {
             $object = [
@@ -30,7 +30,7 @@ class specialistsController extends Controller
     }
 
     public function item($id) {
-        $specialists =  specialists::where('id', '=', $id)->first();
+        $specialists =  Specialist::where('id', '=', $id)->first();
         $object = [
             "id" => $specialists->id,
             "Descripcion" => $specialists->description,
@@ -52,7 +52,7 @@ class specialistsController extends Controller
             'category_id' => 'required|integer'
 
         ]);
-        $specialist = specialists::create([
+        $specialist = Specialist::create([
             'description'=>$data['description'],
             'image'=>$data['image'],
             'user_id'=>$data['user_id'],
