@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\users;
+use App\Models\User;
 
 class UserController extends Controller
 {
     
     public function list() {
-        $users =  users::all();
+        $users =  User::all();
         $list = [];
         foreach($users as $user) {
             $object = [
@@ -20,7 +20,8 @@ class UserController extends Controller
                 "Email" => $user->email,
                 "Telefono" => $user->phone,
                 "Correo_Verificado" => $user->email_verified_at,
-                "Contraseña" => $user->password,
+                "Password" => $user->password,
+                "Nivel"=> $user->level,
                 "Imagen" => $user->image,
                 "Recordar_sesion" => $user->remember_token,
                 "Created" => $user->updated_at,
@@ -33,7 +34,7 @@ class UserController extends Controller
     }
 
     public function item($id) {
-        $users =  users::where('id', '=', $id)->first();
+        $users =  User::where('id', '=', $id)->first();
         $object = [
             "id" => $users->id,
                 "Nombre" => $users->name,
@@ -41,7 +42,8 @@ class UserController extends Controller
                 "Email" => $users->email,
                 "Telefono" => $users->phone,
                 "Correo_Verificado" => $users->email_verified_at,
-                "Contraseña" => $users->password,
+                "Password" => $users->password,
+                "Nivel"=> $users->level,
                 "Imagen" => $users->image,
                 "Recordar_sesion" => $users->remember_token,
                 "Created" => $users->updated_at,
@@ -57,18 +59,16 @@ class UserController extends Controller
             'email' => 'required|string',
             'phone' => 'required|numeric',
             'password' => 'required|string',
-            'image' => 'required|string'
+            
            
            
         ]);
-        $user = users::create([
+        $user = User::create([
             'name'=>$data['name'],
             'surname'=>$data['surname'],
             'email'=>$data['email'],
             'phone'=>$data['phone'],
-            'password'=>$data['password'],
-            'image'=>$data['image']
-
+            'password' => bcrypt($data['password']), // Encriptar la contraseña con bcrypt
             
         ]);
         if ($user) {

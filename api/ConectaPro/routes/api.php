@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\categoriesController as ApiCategoriesController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\RecommendationController;
 use App\Http\Controllers\Api\recommendationsController;
+use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\servicesController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\Api\specialistsController;
 use App\Http\Controllers\Api\specialitiesController;
+use App\Http\Controllers\Api\SpecialityController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\usersController;
 use App\Http\Controllers\CategoriesController;
@@ -35,14 +39,14 @@ Route::post('/categories/create', [CategoryController::class, 'create']);
 Route::post('/categories/update', [CategoryController::class, 'update']);
 
 
-Route::get('/specialities', [specialitiesController::class, 'list']);
-Route::get('/specialities/{id}', [specialitiesController::class, 'item']);
-Route::post('/specialities/create', [specialitiesController::class, 'create']);
+Route::get('/specialities', [SpecialityController::class, 'list']);
+Route::get('/specialities/{id}', [SpecialityController::class, 'item']);
+Route::post('/specialities/create', [SpecialityController::class, 'create']);
 
 
-Route::get('/services', [servicesController::class, 'list']);
-Route::get('/services/{id}', [servicesController::class, 'item']);
-Route::post('/services/create', [servicesController::class, 'create']);
+Route::get('/services', [ServiceController::class, 'list']);
+Route::get('/services/{id}', [ServiceController::class, 'item']);
+Route::post('/services/create', [ServiceController::class, 'create']);
 
 
 Route::get('/users', [UserController::class, 'list']);
@@ -56,9 +60,12 @@ Route::get('/specialists/{id}', [SpecialistController::class, 'item']);
 Route::post('/specialists/create', [SpecialistController::class, 'create']);
 
 
-Route::get('/recommendations', [recommendationsController::class, 'list']);
-Route::get('/recommendations/{id}', [recommendationsController::class, 'item']);
-Route::post('/recommendations/create', [recommendationsController::class, 'create']);
+Route::get('/recommendations', [RecommendationController::class, 'list']);
+Route::get('/recommendations/{id}', [RecommendationController::class, 'item']);
+Route::post('/recommendations/create', [RecommendationController::class, 'create']);
+
+Route::post('/login', [AuthController::class, 'login']);
+
 
 
 

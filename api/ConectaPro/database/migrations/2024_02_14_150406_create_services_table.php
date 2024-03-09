@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('description');
             $table->integer('category_id');
             $table->string('image')->default('placeholder.png');
+            $table->string('availability')->default('Disponible');
+            $table->integer('specialist_id');
+            $table->integer('service_id');
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('image')->default('placeholder.png');
             $table->integer('user_id');
             $table->integer('category_id');
+            $table->integer('specialities_id');
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('specialist_id');
             $table->string('comment');
             $table->decimal('rating', 3, 1); 
+            $table->integer('service_id');
             $table->timestamps();
         });
     }

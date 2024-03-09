@@ -20,6 +20,7 @@ class SpecialistController extends Controller
                 "Imagen" => $specialist->image,
                 "ID_Usuario" => $specialist->user_id,
                 "ID_Categoria" => $specialist->category_id,
+                "ID_Especialidades" => $specialist->specialities_id,
                 "Created" => $specialist->updated_at,
                 "Updated" => $specialist->updated_at
 
@@ -37,6 +38,7 @@ class SpecialistController extends Controller
             "Imagen" => $specialists->image,
             "ID_Usuario" => $specialists->user_id,
             "ID_Categoria" => $specialists->category_id,
+            "ID_Especialidades" => $specialists->specialities_id,
             "Created" => $specialists->updated_at,
             "Updated" => $specialists->updated_at
 
@@ -49,14 +51,18 @@ class SpecialistController extends Controller
             'description' => 'required|string',
             'image' => 'required|string',
             'user_id' => 'required|integer',
-            'category_id' => 'required|integer'
+            'category_id' => 'required|integer',
+            'specialities_id' => 'required|integer'
+
 
         ]);
         $specialist = Specialist::create([
             'description'=>$data['description'],
             'image'=>$data['image'],
             'user_id'=>$data['user_id'],
-            'category_id'=>$data['category_id']
+            'category_id'=>$data['category_id'],
+            'specialities_id'=>$data['category_id']
+
 
         ]);
         if ($specialist) {
