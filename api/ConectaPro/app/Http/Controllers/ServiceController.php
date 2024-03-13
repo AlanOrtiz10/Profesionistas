@@ -8,6 +8,7 @@ class ServiceController extends Controller
 {
     public function index() 
     {
-        return view('admin/Services.index');
+        return view('admin/service.index');
     }
+
 }

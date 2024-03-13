@@ -1,7 +1,6 @@
-
 @extends('layouts.panel')
-
-@section('title', 'Category - Admin')
+@section('title', 'Categories-Admin')
 
 @section('content')
+
 @endsection

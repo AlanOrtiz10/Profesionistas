@@ -9,10 +9,11 @@ use App\Models\User;
 class UserController extends Controller
 {
     
-    public function list() {
-        $users =  User::all();
+    public function list() 
+    {
+        $users = User::all();
         $list = [];
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $object = [
                 "id" => $user->id,
                 "Nombre" => $user->name,
@@ -20,18 +21,17 @@ class UserController extends Controller
                 "Email" => $user->email,
                 "Telefono" => $user->phone,
                 "Correo_Verificado" => $user->email_verified_at,
-                "Password" => $user->password,
                 "Nivel"=> $user->level,
                 "Imagen" => $user->image,
                 "Recordar_sesion" => $user->remember_token,
-                "Created" => $user->updated_at,
-                "Updated" => $user->updated_at
-
+                "Created" => $user->created_at, // Cambié de updated_at a created_at
+                "Updated" => $user->updated_at,
             ];
             array_push($list, $object);
         }
-        return response()->json($list);
+        return $list;
     }
+
 
     public function item($id) {
         $users =  User::where('id', '=', $id)->first();
@@ -42,7 +42,6 @@ class UserController extends Controller
                 "Email" => $users->email,
                 "Telefono" => $users->phone,
                 "Correo_Verificado" => $users->email_verified_at,
-                "Password" => $users->password,
                 "Nivel"=> $users->level,
                 "Imagen" => $users->image,
                 "Recordar_sesion" => $users->remember_token,
@@ -59,22 +58,65 @@ class UserController extends Controller
             'email' => 'required|string',
             'phone' => 'required|numeric',
             'password' => 'required|string',
-            
-           
-           
+            'level_id' => 'required|string', // Agrega el campo nivel según tu estructura de base de datos
+            'image' => 'required|string', // Agrega el campo imagen según tu estructura de base de datos
         ]);
+    
+        // Encriptar la contraseña con bcrypt
+        $hashedPassword = bcrypt($data['password']);
+    
         $user = User::create([
-            'name'=>$data['name'],
-            'surname'=>$data['surname'],
-            'email'=>$data['email'],
-            'phone'=>$data['phone'],
-            'password' => bcrypt($data['password']), // Encriptar la contraseña con bcrypt
-            
+            'name' => $data['name'],
+            'surname' => $data['surname'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'password' => $hashedPassword,
+            'level_id' => $data['level_id'], // Ajusta según el nombre real del campo
+            'image' => $data['image'], // Ajusta según el nombre real del campo
+            // Otros campos según sea necesario
         ]);
+    
         if ($user) {
             $object = [
                 "response" => 'Success. Item saved correctly.',
                 "data" => $user,
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong, please try again.'
+            ];
+            return response()->json($object);
+        }
+    }
+    
+    
+
+
+    public function update( Request $request){
+        $data = $request->validate([
+            'id' => 'required|int',
+            'email' => 'required|string',
+            'phone' => 'required|string',
+            'status' => 'required|int',
+            'level_id' => 'required|int',
+            'image' => 'required|string',
+        ]);
+
+        $users =  User::where('id', '=', $data['id'])->first();
+
+        $users->name = $data['name'];
+        $users->surname = $data['surname'];
+        $users->email = $data['email'];
+        $users->phone = $data['phone'];
+        $users->status = $data['status'];
+        $users->level_id = $data['level_id'];
+        $users->image = $data['image'];
+
+        if ($users->update()) {
+            $object = [
+                "response" => 'Success. Item saved correctly.',
+                "data" => $users    ,
             ];
             return response()->json($object);
         }else{
