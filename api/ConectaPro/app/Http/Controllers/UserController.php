@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,7 +27,6 @@ class UserController extends Controller
         'surname' => 'required|string',
         'email' => 'required|string',
         'phone' => 'required|numeric',
-        'password' => 'required|string',
     ]);
 
     // Encriptar la contraseña con bcrypt
@@ -40,7 +38,6 @@ class UserController extends Controller
         'surname' => $data['surname'],
         'email' => $data['email'],
         'phone' => $data['phone'],
-        'password' => $hashedPassword,
     ]);
 
     // Redirigir o mostrar un mensaje según sea necesario

@@ -9,6 +9,8 @@ use App\Http\Controllers\SpecialistsController;
 use App\Http\Controllers\SpecialityController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,15 +29,21 @@ Route::get('/old', function () {
 
 Route::get('/admi', [PanelController::class, 'index'])->name('admin');
 
-Route::get('/admi/Category', [CategoryController::class, 'index'])->name('Category');
+Route::get('/admi/Category', [CategoryController::class, 'index'])->name('admin.category.index');
+Route::post('/admi/Category', [CategoryController::class, 'store'])->name('admin.category.store');
 
-Route::get('/admi/Recommendation', [RecommendationController::class, 'index'])->name('Recommendation');
 
-Route::get('/admi/Service', [ServiceController::class, 'index'])->name('Service');
 
-Route::get('/admi/Specialist', [SpecialistController::class, 'index'])->name('Specialist');
+Route::get('/admi/Recommendation', [RecommendationController::class, 'index'])->name('admin.recommendation.index');
+Route::get('/admi/Recommendation/create', [RecommendationController::class, 'create'])->name('admin.recommendation.create');
+Route::post('/admi/Recommendation', [RecommendationController::class, 'store'])->name('admin.recommendation.store');
 
-Route::get('/admi/Speciality', [SpecialityController::class, 'index'])->name('Speciality');
+
+Route::get('/admi/Service', [ServiceController::class, 'index'])->name('admin.service.index');
+
+Route::get('/admi/Specialist', [SpecialistController::class, 'index'])->name('admin.specialist.index');
+
+Route::get('/admi/Speciality', [SpecialityController::class, 'index'])->name('admin.speciality.index');
 
 
 
@@ -48,3 +56,7 @@ Route::put('/users/update/{id}', [UserController::class, 'index'])->name('users.
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

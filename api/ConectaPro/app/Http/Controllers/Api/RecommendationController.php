@@ -10,31 +10,44 @@ class RecommendationController extends Controller
 {
 
     public function list() {
-        $recommendations =  Recommendation::all();
+        $recommendations = Recommendation::with('user', 'specialist', 'service')->get();
         $list = [];
-        foreach($recommendations as $recommendation) {
+        foreach ($recommendations as $recommendation) {
+            $user = $recommendation->user;
+            $specialist = $recommendation->specialist;
+    
             $object = [
                 "id" => $recommendation->id,
-                "ID_Usuario" => $recommendation->user_id,
-                "ID_Especialista" => $recommendation->specialist_id,
+                "ID_Usuario" => [
+                    "id" => $user->id,
+                    "name" => $user->name,
+                    "surname" => $user->surname,
+                ],
+                "ID_Especialista" => [
+                    "id" => $specialist->id,
+                    "name" => $specialist->name,
+                    "surname" => $specialist->surname,
+                ],
                 "Comentario" => $recommendation->comment,
                 "Calificacion" => $recommendation->rating,
-                "ID_Servicio" => $recommendation->service_id,
-                "Created" => $recommendation->updated_at,
+                "ID_Servicio" => $recommendation->service->name, 
+                "Created" => $recommendation->created_at,
                 "Updated" => $recommendation->updated_at
-
             ];
             array_push($list, $object);
         }
-        return response()->json($list);
+        return $list;
     }
+    
+    
+    
 
     public function item($id) {
         $recommendations =  Recommendation::where('id', '=', $id)->first();
         $object = [
             "id" => $recommendations->id,
-            "ID_Usuario" => $recommendations->user_id,
-            "ID_Especialista" => $recommendations->specialist_id,
+            "ID_Usuario" => $recommendations->user,
+            "ID_Especialista" => $recommendations->user,
             "Comentario" => $recommendations->comment,
             "Calificacion" => $recommendations->rating,
             "ID_Servicio" => $recommendations->service_id,

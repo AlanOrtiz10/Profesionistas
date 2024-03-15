@@ -10,26 +10,32 @@ class ServiceController extends Controller
 {
     
     public function list() {
-        $services =  Service::all();
+        $services = Service::with('user', 'specialist', 'category')->get();
         $list = [];
         foreach($services as $service) {
+            $categoryName = $service->category ? $service->category->name : null;
             $object = [
                 "id" => $service->id,
                 "Nombre" => $service->name,
                 "Descripcion" => $service->description,
-                "ID_Categoria" => $service->category_id,
+                "ID_Categoria" => $categoryName, 
                 "Imagen" => $service->image,
                 "Disponibilidad" => $service->availability,
-                "ID_Especialista" => $service->specialist_id,
+                "ID_Especialista" => [
+                    "id" => $service->specialist->id,
+                    "name" => $service->specialist->name,
+                    "surname" => $service->specialist->surname,
+                ],                
                 "ID_Usuario" => $service->user_id,
                 "Created" => $service->updated_at,
                 "Updated" => $service->updated_at
-
+    
             ];
             array_push($list, $object);
         }
-        return response()->json($list);
+        return $list;
     }
+    
 
     public function item($id) {
         $services =  Service::where('id', '=', $id)->first();

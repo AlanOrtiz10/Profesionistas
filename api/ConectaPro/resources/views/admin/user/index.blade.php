@@ -2,31 +2,34 @@
 @section('title', 'Users-Admin')
 
 @section('content')
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>
-$(document).ready(function(){
-    // Activate tooltip
-    $('[data-toggle="tooltip"]').tooltip();
-    
-    // Select/Deselect checkboxes
-    var checkbox = $('table tbody input[type="checkbox"]');
-    $("#selectAll").click(function(){
-        if(this.checked){
-            checkbox.each(function(){
-                this.checked = true;                        
-            });
-        } else{
-            checkbox.each(function(){
-                this.checked = false;                        
-            });
-        } 
+    $(document).ready(function(){
+        // Activate tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+        
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function(){
+            if(this.checked){
+                checkbox.each(function(){
+                    this.checked = true;                        
+                });
+            } else{
+                checkbox.each(function(){
+                    this.checked = false;                        
+                });
+            } 
+        });
+        checkbox.click(function(){
+            if(!this.checked){
+                $("#selectAll").prop("checked", false);
+            }
+        });
     });
-    checkbox.click(function(){
-        if(!this.checked){
-            $("#selectAll").prop("checked", false);
-        }
-    });
-});
 </script>
 
 <div class="container-xl">
@@ -38,12 +41,16 @@ $(document).ready(function(){
                         <h2>Administrador de <b>Usuarios</b></h2>
                     </div>
                     <div class="col-sm-6">
-                    <a href="{{ route('users.create.form') }}" class="btn btn-success"><i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Usuario</span></a>
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal">
+                            <i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Usuario</span>
+                        </button>
                         <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>                        
                     </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
+                <!-- Table Header -->
                 <thead>
                     <tr>
                         <th>
@@ -57,42 +64,42 @@ $(document).ready(function(){
                         <th>Apellido</th>
                         <th>Email</th>
                         <th>Telefono</th>
-                        <th>Password</th>
                         <th>Nivel</th>
                         <th>Imagen</th>
                         <th>Acciones</th>
-</tr>
-</thead>
-<tbody>
-    @foreach($users as $user)
-        <tr>
-            <td>
-                <span class="custom-checkbox">
-                    <input type="checkbox" id="checkbox{{$user['id']}}" name="options[]" value="{{$user['id']}}">
-                    <label for="checkbox{{$user['id']}}"></label>
-                </span>
-            </td>
-            <td>{{$user['id']}}</td>
-            <td>{{$user['Nombre']}}</td>
-            <td>{{$user['Apellido']}}</td>
-            <td>{{$user['Email']}}</td>
-            <td>{{$user['Telefono']}}</td>
-            <td>********</td>
-            <td>{{$user['Nivel']['name']}}</td>
-            <td>{{$user['Imagen']}}</td>
-            <td>
-                <!-- Acciones de edición y eliminación -->
-                <a href="{{url('/users/' . $user['id'] . '/edit')}}" class="edit" data-toggle="modal">
-                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
-                </a>
-                <a href="#" class="delete" data-toggle="modal">
-                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
-                </a>
-            </td>
-        </tr>
-    @endforeach
-</tbody>
-</table>
+                    </tr>
+                </thead>
+                <!-- Table Body -->
+                <tbody>
+                    @foreach($users as $user)
+                        <tr>
+                            <td>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="checkbox{{$user['id']}}" name="options[]" value="{{$user['id']}}">
+                                    <label for="checkbox{{$user['id']}}"></label>
+                                </span>
+                            </td>
+                            <td>{{$user['id']}}</td>
+                            <td>{{$user['Nombre']}}</td>
+                            <td>{{$user['Apellido']}}</td>
+                            <td>{{$user['Email']}}</td>
+                            <td>{{$user['Telefono']}}</td>
+                            <td>{{$user['Nivel']['name']}}</td>
+                            <td>{{$user['Imagen']}}</td>
+                            <td>
+                                <!-- Acciones de edición y eliminación -->
+                                <a href="{{url('/users/' . $user['id'] . '/edit')}}" class="edit" data-toggle="modal">
+                                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
+                                </a>
+                                <a href="#" class="delete" data-toggle="modal">
+                                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <!-- Pagination and Other Elements -->
             <div class="clearfix">
                 <div class="hint-text">Mostrando <b>{{count($users)}}</b> resultados</div>
                 <ul class="pagination">
@@ -107,6 +114,41 @@ $(document).ready(function(){
             </div>
         </div>
     </div>        
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="addEmployeeModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Nuevo Usuario</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body (Your Form Goes Here) -->
+            <div class="modal-body">
+                <!-- Your Form Code Goes Here -->
+                <!-- For example, you can create a form using Laravel's form helpers -->
+                <form action="{{ route('users.create') }}" method="POST">
+                    @csrf
+                    <!-- Your Form Fields Goes Here -->
+                    <div class="form-group">
+                        <label for="name">Nombre:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <!-- Add other form fields as needed -->
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection

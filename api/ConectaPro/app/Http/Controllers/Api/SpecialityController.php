@@ -22,7 +22,7 @@ class SpecialityController extends Controller
             ];
             array_push($list, $object);
         }
-        return response()->json($list);
+        return $list;
     }
 
     public function item($id) {

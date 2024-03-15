@@ -14,7 +14,7 @@
                 <div class="card bg-primary text-white mb-4">
                     <div class="card-body">Categorias</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('Category') }}">Ver Categorias</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.category.index') }}">Ver Categorias</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                 <div class="card bg-warning text-white mb-4">
                     <div class="card-body">Recomendaciones</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('Recommendation') }}">Ver Recomendaciones</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.recommendation.index') }}">Ver Recomendaciones</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">Servicios</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('Service') }}">Ver Servicios</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.service.index') }}">Ver Servicios</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="card bg-primary text-white mb-4">
                     <div class="card-body">Especialistas</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('Specialist') }}">Ver Especialistas</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.specialist.index') }}">Ver Especialistas</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -57,9 +57,9 @@
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
-                    <div class="card-body">Remplacements</div>
+                    <div class="card-body">Especialidades</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="">Ver Refacciones</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.speciality.index') }}">Ver Especialidades</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>

@@ -10,25 +10,38 @@ class SpecialistController extends Controller
 {
     
 
-    public function list() {
-        $specialists =  Specialist::all();
-        $list = [];
-        foreach($specialists as $specialist) {
-            $object = [
-                "id" => $specialist->id,
-                "Descripcion" => $specialist->description,
-                "Imagen" => $specialist->image,
-                "ID_Usuario" => $specialist->user_id,
-                "ID_Categoria" => $specialist->category_id,
-                "ID_Especialidades" => $specialist->specialities_id,
-                "Created" => $specialist->updated_at,
-                "Updated" => $specialist->updated_at
+    public function list()
+{
+    $specialists = Specialist::with(['specialities:id,description', 'user:id,name,surname', 'category:id,name'])->get();
+    
+    $list = $specialists->map(function ($specialist) {
+        return [
+            "id" => $specialist->id,
+            "Descripcion" => $specialist->description,
+            "Imagen" => $specialist->image,
+            "ID_Usuario" => [
+                "id" => $specialist->user->id,
+                "name" => $specialist->user->name,
+                "surname" => $specialist->user->surname,
+            ],
+            "ID_Categoria" =>
+                
+               $specialist->category->name,
+        
+            "ID_Especialidades" => 
+            $specialist->specialities->description,
+           
+            "Created" => $specialist->created_at,
+            "Updated" => $specialist->updated_at
+        ];
+    });
+    
+    return $list;
+}
 
-            ];
-            array_push($list, $object);
-        }
-        return response()->json($list);
-    }
+    
+    
+
 
     public function item($id) {
         $specialists =  Specialist::where('id', '=', $id)->first();
