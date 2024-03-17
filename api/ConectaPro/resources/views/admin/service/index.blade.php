@@ -42,8 +42,8 @@
                     </div>
                     <div class="col-sm-6">
                         <!-- Button to Open the Modal -->
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal">
-                            <i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Usuario</span>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addServiceModal">
+                            <i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Servicio</span>
                         </button>
                         <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>                        
                     </div>
@@ -101,7 +101,7 @@
             </table>
             <!-- Pagination and Other Elements -->
             <div class="clearfix">
-                <div class="hint-text">Mostrando <b>{{count($service)}}</b> resultados</div>
+                <div class="hint-text">Mostrando <b>{{count($services)}}</b> resultados</div>
                 <ul class="pagination">
                     <li class="page-item disabled"><a href="#">Previous</a></li>
                     <li class="page-item"><a href="#" class="page-link">1</a></li>
@@ -116,31 +116,57 @@
     </div>        
 </div>
 
-<!-- The Modal -->
-<div class="modal" id="addEmployeeModal">
+<!-- Modal de creación de servicios -->
+<!-- Modal de creación de servicios -->
+<div class="modal" id="addServiceModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Agregar Nuevo Usuario</h4>
+                <h4 class="modal-title">Agregar Nuevo Servicio</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <!-- Modal Body (Your Form Goes Here) -->
+            <!-- Modal Body -->
             <div class="modal-body">
-                <!-- Your Form Code Goes Here -->
-                <!-- For example, you can create a form using Laravel's form helpers -->
-                <form action="{{ route('users.create') }}" method="POST">
+                <form action="{{ route('admin.service.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <!-- Your Form Fields Goes Here -->
                     <div class="form-group">
                         <label for="name">Nombre:</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
-                    <!-- Add other form fields as needed -->
-
-                    <!-- Modal Footer -->
+                    <div class="form-group">
+                        <label for="description">Descripción:</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Categoría:</label>
+                        <select class="form-control" id="category_id" name="category_id" required>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Imagen:</label>
+                        <input type="file" class="form-control-file" id="image" name="image" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="availability">Disponibilidad:</label>
+                        <select class="form-control" id="availability" name="availability" required>
+                            <option value="Disponible">Disponible</option>
+                            <option value="Fuera de servicio">Fuera de servicio</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialist_id">Especialista:</label>
+                        <select class="form-control" id="specialist_id" name="specialist_id" required>
+                            @foreach($specialists as $specialist)
+                                <option value="{{ $specialist->id }}">{{ $specialist->user->name }} {{ $specialist->user->surname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -150,5 +176,7 @@
         </div>
     </div>
 </div>
+
+
 
 @endsection

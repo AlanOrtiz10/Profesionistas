@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\RecommendationController as ApiRecommendationContro
 use App\Models\User;
 use App\Models\Specialist;
 use App\Models\Service;
+use App\Models\Recommendation;
+
 
 class RecommendationController extends Controller
 {
@@ -13,42 +15,57 @@ class RecommendationController extends Controller
     {
         $apiRecommendationController = new ApiRecommendationController();
         $recommendations = $apiRecommendationController->list();
-        return view('admin.recommendation.index', compact('recommendations'));
+        $users = User::all(); // Obtener todos los usuarios
+        $specialists = Specialist::all(); // Obtener todos los especialistas
+        return view('admin.recommendation.index', compact('recommendations', 'users', 'specialists'));
     }
+    
+
 
     public function store(Request $request)
-    {
-        // Validar los datos del formulario
-        $data = $request->validate([
-            'user_id' => 'required|integer',
-            'specialist_id' => 'required|integer',
-            'comment' => 'required|string',
-            'rating' => 'required|numeric|min:1|max:5',
-            'service_id' => 'required|integer',
-        ]);
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id', // Asegúrate de que se proporcione un user_id válido
+        'specialist_id' => 'required|exists:specialists,id',
+        'comment' => 'required',
+        'rating' => 'required|integer|between:1,5',
+        'service_id' => 'required',
+    ]);
 
-        // Crear una nueva recomendación
-        $recommendation = new \App\Models\Recommendation();
-        $recommendation->user_id = $data['user_id'];
-        $recommendation->specialist_id = $data['specialist_id'];
-        $recommendation->comment = $data['comment'];
-        $recommendation->rating = $data['rating'];
-        $recommendation->service_id = $data['service_id'];
+    Recommendation::create([
+        'user_id' => $request->user_id,
+        'specialist_id' => $request->specialist_id,
+        'comment' => $request->comment,
+        'rating' => $request->rating,
+        'service_id' => $request->service_id,
+    ]);
 
-        // Guardar la recomendación en la base de datos
-        $recommendation->save();
+    return redirect()->route('admin.recommendation.index')->with('success', 'Recomendación agregada correctamente.');
+}
 
-        // Redirigir a la página de índice de recomendaciones
-        return redirect()->route('admin.recommendation.index');
-    }
 
     public function create()
+{
+    // Obtener todos los usuarios y especialistas
+    $users = User::all();
+    $specialists = Specialist::with('user')->get();
+    return view('admin.recommendation.create', compact('users', 'specialists'));
+}
+
+    
+    
+
+
+    public function getServices($specialistId)
     {
-        // Obtener usuarios, especialistas y servicios para llenar los select
-        $users = User::all();
-        $specialists = Specialist::all();
-        $services = Service::all();
-        
-        return view('admin.recommendation.create', compact('users', 'specialists', 'services'));
+        // Obtener todos los servicios relacionados con el especialista seleccionado
+        $services = Service::where('specialist_id', $specialistId)->get();
+        return response()->json($services);
     }
+    
+
+    
+
+
+    
 }

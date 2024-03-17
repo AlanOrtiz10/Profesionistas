@@ -38,21 +38,30 @@ class ServiceController extends Controller
     
 
     public function item($id) {
-        $services =  Service::where('id', '=', $id)->first();
+        $service = Service::with('user', 'specialist', 'category')->findOrFail($id);
+    
+        $categoryName = $service->category ? $service->category->name : null;
+    
         $object = [
-            "id" => $services->id,
-            "Nombre" => $services->name,
-            "Descripcion" => $services->description,
-            "ID_Categoria" => $services->category_id,
-            "Imagen" => $services->image,
-            "Disponibilidad" => $services->availability,
-            "ID_Especialista" => $services->specialist_id,
-            "ID_Usuario" => $services->user_id,
-            "Created" => $services->updated_at,
-            "Updated" => $services->updated_at
+            "id" => $service->id,
+            "Nombre" => $service->name,
+            "Descripcion" => $service->description,
+            "ID_Categoria" => $categoryName,
+            "Imagen" => $service->image,
+            "Disponibilidad" => $service->availability,
+            "ID_Especialista" => [
+                "id" => $service->specialist->id,
+                "name" => $service->specialist->name,
+                "surname" => $service->specialist->surname,
+            ],
+            "ID_Usuario" => $service->user_id,
+            "Created" => $service->updated_at,
+            "Updated" => $service->updated_at
         ];
-        return response()->json($object);
+    
+        return $object;
     }
+    
 
 
     public function create(Request $request) {
@@ -63,7 +72,7 @@ class ServiceController extends Controller
             'image' => 'required|string',
             'availability' => 'required|string',
             'user_id' => 'required|integer',
-            'service_id' => 'required|integer',
+            'specialist_id' => 'required|integer',
 
 
         ]);
@@ -74,10 +83,7 @@ class ServiceController extends Controller
             'image'=>$data['image'],
             'availability'=>$data['availability'],
             'user_id'=>$data['user_id'],
-            'service_id'=>$data['service_id'],
-
-
-
+            'specialist_id'=>$data['specialist_id'],
 
         ]);
         if ($service) {
@@ -93,5 +99,48 @@ class ServiceController extends Controller
             return response()->json($object);
         }
     }
+
+
+    public function update(Request $request) {
+        $data = $request->validate([
+            'id' => 'required|int',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'category_id' => 'required|integer',
+            'image' => 'required|string',
+            'availability' => 'required|string',
+            'user_id' => 'required|int',
+            'specialist_id' => 'required|int',
+        ]);
+    
+        $service = Service::find($data['id']);
+    
+        if (!$service) {
+            return response()->json(['error' => 'Servicio no encontrado'], 404);
+        }
+    
+        $service->name = $data['name'];
+        $service->description = $data['description'];
+        $service->category_id = $data['category_id'];
+        $service->image = $data['image'];
+        $service->availability = $data['availability'];
+        $service->user_id = $data['user_id'];
+        $service->specialist_id = $data['specialist_id'];
+    
+        if ($service->save()) {
+            $object = [
+                "response" => 'Success. Item updated correctly.',
+                "data" => $service,
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong, please try again.'
+            ];
+            return response()->json($object);
+        }
+    }
+    
+    
 
 }

@@ -10,8 +10,9 @@ use App\Models\Category;
 class Service extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','description', 'image', 'category_id', 'availability', 'specialist_id', 'service_id'];
-
+    protected $fillable = [
+        'name', 'description', 'category_id', 'image', 'availability', 'specialist_id', 'user_id',
+    ];
 
     public function category(){
         return $this->belongsTo(Category::class);

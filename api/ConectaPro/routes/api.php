@@ -42,27 +42,37 @@ Route::post('/categories/update', [CategoryController::class, 'update']);
 Route::get('/specialities', [SpecialityController::class, 'list']);
 Route::get('/specialities/{id}', [SpecialityController::class, 'item']);
 Route::post('/specialities/create', [SpecialityController::class, 'create']);
+Route::post('/specialities/update', [SpecialityController::class, 'update']);
+
 
 
 Route::get('/services', [ServiceController::class, 'list']);
 Route::get('/services/{id}', [ServiceController::class, 'item']);
 Route::post('/services/create', [ServiceController::class, 'create']);
+Route::post('/services/update', [ServiceController::class, 'update']);
+
 
 
 Route::get('/users', [UserController::class, 'list']);
 Route::get('/users/{id}', [UserController::class, 'item']);
 Route::post('/users/create', [UserController::class, 'create']);
+Route::post('/users/update', [UserController::class, 'update']);
+
 
 
 
 Route::get('/specialists', [SpecialistController::class, 'list']);
 Route::get('/specialists/{id}', [SpecialistController::class, 'item']);
 Route::post('/specialists/create', [SpecialistController::class, 'create']);
+Route::post('/specialists/update', [SpecialistController::class, 'update']);
+
 
 
 Route::get('/recommendations', [RecommendationController::class, 'list']);
 Route::get('/recommendations/{id}', [RecommendationController::class, 'item']);
 Route::post('/recommendations/create', [RecommendationController::class, 'create']);
+Route::post('/recommendations/update', [RecommendationController::class, 'update']);
+
 
 Route::post('/login', [AuthController::class, 'login']);
 

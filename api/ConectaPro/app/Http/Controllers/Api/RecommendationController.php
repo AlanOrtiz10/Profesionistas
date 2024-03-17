@@ -38,26 +38,39 @@ class RecommendationController extends Controller
         }
         return $list;
     }
-    
-    
-    
 
     public function item($id) {
-        $recommendations =  Recommendation::where('id', '=', $id)->first();
+        $recommendation = Recommendation::with('user', 'specialist', 'service')->find($id);
+    
+        if (!$recommendation) {
+            return response()->json(['error' => 'Recomendación no encontrada'], 404);
+        }
+    
+        $user = $recommendation->user;
+        $specialist = $recommendation->specialist;
+    
         $object = [
-            "id" => $recommendations->id,
-            "ID_Usuario" => $recommendations->user,
-            "ID_Especialista" => $recommendations->user,
-            "Comentario" => $recommendations->comment,
-            "Calificacion" => $recommendations->rating,
-            "ID_Servicio" => $recommendations->service_id,
-            "Created" => $recommendations->updated_at,
-            "Updated" => $recommendations->updated_at
-
-
+            "id" => $recommendation->id,
+            "ID_Usuario" => [
+                "id" => $user->id,
+                "name" => $user->name,
+                "surname" => $user->surname,
+            ],
+            "ID_Especialista" => [
+                "id" => $specialist->id,
+                "name" => $specialist->name,
+                "surname" => $specialist->surname,
+            ],
+            "Comentario" => $recommendation->comment,
+            "Calificacion" => $recommendation->rating,
+            "ID_Servicio" => $recommendation->service->name, 
+            "Created" => $recommendation->created_at,
+            "Updated" => $recommendation->updated_at
         ];
-        return response()->json($object);
+    
+        return $object;
     }
+    
 
     public function create(Request $request) {
         $data = $request->validate([
@@ -91,6 +104,44 @@ class RecommendationController extends Controller
             return response()->json($object);
         }
     }
+
+
+    public function update(Request $request) {
+        $data = $request->validate([
+            'id' => 'required|int',
+            'user_id' => 'required|int',
+            'specialist_id' => 'required|int',
+            'comment' => 'required|string',
+            'rating' => 'required|numeric',
+            'service_id' => 'required|int',
+        ]);
+    
+        $recommendation = Recommendation::find($data['id']);
+    
+        if (!$recommendation) {
+            return response()->json(['error' => 'Recomendación no encontrada'], 404);
+        }
+    
+        $recommendation->user_id = $data['user_id'];
+        $recommendation->specialist_id = $data['specialist_id'];
+        $recommendation->comment = $data['comment'];
+        $recommendation->rating = $data['rating'];
+        $recommendation->service_id = $data['service_id'];
+    
+        if ($recommendation->save()) {
+            $object = [
+                "response" => 'Success. Item updated correctly.',
+                "data" => $recommendation,
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong, please try again.'
+            ];
+            return response()->json($object);
+        }
+    }
+    
 
 
 

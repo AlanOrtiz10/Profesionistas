@@ -63,4 +63,35 @@ class SpecialityController extends Controller
         }
     }
 
+    public function update(Request $request) {
+        $data = $request->validate([
+            'id' => 'required|int',
+            'name' => 'required|string',
+            'description' => 'required|string'
+        ]);
+    
+        $speciality = Speciality::find($data['id']);
+    
+        if (!$speciality) {
+            return response()->json(['error' => 'Especialidad no encontrada'], 404);
+        }
+    
+        $speciality->name = $data['name'];
+        $speciality->description = $data['description'];
+    
+        if ($speciality->save()) {
+            $object = [
+                "response" => 'Success. Item updated correctly.',
+                "data" => $speciality,
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong, please try again.'
+            ];
+            return response()->json($object);
+        }
+    }
+    
+
 }

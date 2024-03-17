@@ -37,9 +37,12 @@ Route::post('/admi/Category', [CategoryController::class, 'store'])->name('admin
 Route::get('/admi/Recommendation', [RecommendationController::class, 'index'])->name('admin.recommendation.index');
 Route::get('/admi/Recommendation/create', [RecommendationController::class, 'create'])->name('admin.recommendation.create');
 Route::post('/admi/Recommendation', [RecommendationController::class, 'store'])->name('admin.recommendation.store');
+Route::get('/get-services/{specialistId}', [RecommendationController::class, 'getServices']);
 
 
 Route::get('/admi/Service', [ServiceController::class, 'index'])->name('admin.service.index');
+Route::post('/admi/Service', [ServiceController::class, 'store'])->name('admin.service.store');
+
 
 Route::get('/admi/Specialist', [SpecialistController::class, 'index'])->name('admin.specialist.index');
 
