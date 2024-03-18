@@ -14,11 +14,15 @@ class RecommendationController extends Controller
     public function index() 
     {
         $apiRecommendationController = new ApiRecommendationController();
-        $recommendations = $apiRecommendationController->list();
+        $apiRecommendations = $apiRecommendationController->list();
         $users = User::all(); // Obtener todos los usuarios
         $specialists = Specialist::all(); // Obtener todos los especialistas
-        return view('admin.recommendation.index', compact('recommendations', 'users', 'specialists'));
+        $recommendations = Recommendation::paginate(10);
+    
+        return view('admin.recommendation.index', compact('recommendations', 'users', 'specialists', 'apiRecommendations'));
     }
+    
+
     
 
 

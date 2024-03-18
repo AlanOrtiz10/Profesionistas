@@ -103,46 +103,91 @@
                 </thead>
                 <!-- Table Body -->
                 <tbody>
-                    @foreach($recommendations as $recommendation)
-                        <tr>
-                            <td>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="checkbox{{$recommendation['id']}}" name="options[]" value="{{$recommendation['id']}}">
-                                    <label for="checkbox{{$recommendation['id']}}"></label>
-                                </span>
-                            </td>
-                            <td>{{$recommendation['id']}}</td>
-                            <td>{{$recommendation['ID_Usuario']['name']}} {{$recommendation['ID_Usuario']['surname']}}</td>
-                            <td>{{$recommendation['ID_Especialista']['name']}} {{$recommendation['ID_Especialista']['surname']}}</td>
-                            <td>{{$recommendation['Comentario']}}</td>
-                            <td>{{$recommendation['Calificacion']}}</td>
-                            <td>{{$recommendation['ID_Servicio']}}</td>
-                            <td>
-                                <!-- Acciones de edición y eliminación -->
-                                <a href="{{url('/users/' . $recommendation['id'] . '/edit')}}" class="edit" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
-                                </a>
-                                <a href="#" class="delete" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
+    @foreach($recommendations as $recommendation)
+        <tr>
+            <td>
+                <span class="custom-checkbox">
+                    <input type="checkbox" id="checkbox{{$recommendation->id}}" name="options[]" value="{{$recommendation->id}}">
+                    <label for="checkbox{{$recommendation->id}}"></label>
+                </span>
+            </td>
+            <td>{{$recommendation->id}}</td>
+            <td>
+                @if($recommendation->user)
+                    {{$recommendation->user->name}} {{$recommendation->user->surname}}
+                @endif
+            </td>
+            <td>
+                @if($recommendation->specialist)
+                    {{$recommendation->specialist->name}} {{$recommendation->specialist->surname}}
+                @endif
+            </td>
+            <td>{{$recommendation->comment}}</td>
+            <td>{{$recommendation->rating}}</td>
+            <td>
+                @if($recommendation->service_id)
+                    {{$recommendation->service->name}} {{-- Aquí asumo que la relación se llama "service" y que el nombre del servicio está en la propiedad "name" --}}
+                @endif
+            </td>
+            <td>
+                <!-- Acciones de edición y eliminación -->
+                <a href="{{url('/users/' . $recommendation->id . '/edit')}}" class="edit" data-toggle="modal">
+                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
+                </a>
+                <a href="#" class="delete" data-toggle="modal">
+                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                </a>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
+
             </table>
-            <!-- Pagination and Other Elements -->
-            <div class="clearfix">
-                <div class="hint-text">Mostrando <b>{{count($recommendations)}}</b> resultados</div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
-            </div>
+
+<!-- Pagination and Other Elements -->
+<div class="clearfix">
+    <div class="hint-text">Se encontraron <b>{{ $recommendations->total() }}</b> resultados</div>
+    <ul class="pagination justify-content-center">
+        {{-- Previous Page Link --}}
+        @if ($recommendations->onFirstPage())
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+        @else
+            <li class="page-item">
+                <a class="page-link" href="{{ $recommendations->previousPageUrl() }}" rel="prev">Anterior</a>
+            </li>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @foreach ($recommendations->getUrlRange(1, $recommendations->lastPage()) as $page => $url)
+            @if ($page == $recommendations->currentPage())
+                <li class="page-item active">
+                    <span class="page-link">{{ $page }}</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endif
+        @endforeach
+
+        {{-- Next Page Link --}}
+        @if ($recommendations->hasMorePages())
+            <li class="page-item">
+                <a class="page-link" href="{{ $recommendations->nextPageUrl() }}" rel="next">Siguiente</a>
+            </li>
+        @else
+            <li class="page-item disabled">
+                <span class="page-link">Siguiente</span>
+            </li>
+        @endif
+    </ul>
+</div>
+
+
+
         </div>
     </div>        
 </div>

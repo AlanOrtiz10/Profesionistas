@@ -11,15 +11,14 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| Aquí es donde puedes registrar las rutas web para tu aplicación.
+| Estas rutas son cargadas por RouteServiceProvider y todas serán asignadas
+| al grupo de middleware "web". ¡Haz algo genial!
 |
 */
 
@@ -31,6 +30,9 @@ Route::get('/admi', [PanelController::class, 'index'])->name('admin');
 
 Route::get('/admi/Category', [CategoryController::class, 'index'])->name('admin.category.index');
 Route::post('/admi/Category', [CategoryController::class, 'store'])->name('admin.category.store');
+Route::get('/admi/Category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
+Route::put('/admi/Category/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+
 
 
 
@@ -39,26 +41,21 @@ Route::get('/admi/Recommendation/create', [RecommendationController::class, 'cre
 Route::post('/admi/Recommendation', [RecommendationController::class, 'store'])->name('admin.recommendation.store');
 Route::get('/get-services/{specialistId}', [RecommendationController::class, 'getServices']);
 
-
 Route::get('/admi/Service', [ServiceController::class, 'index'])->name('admin.service.index');
 Route::post('/admi/Service', [ServiceController::class, 'store'])->name('admin.service.store');
 
-
 Route::get('/admi/Specialist', [SpecialistController::class, 'index'])->name('admin.specialist.index');
+Route::post('/admi/Specialist', [SpecialistController::class, 'create'])->name('admin.specialist.create');
 
 Route::get('/admi/Speciality', [SpecialityController::class, 'index'])->name('admin.speciality.index');
+Route::get('/admi/Speciality/create', [SpecialityController::class, 'create'])->name('admin.speciality.create');
+Route::post('/admi/Speciality/create', [SpecialityController::class, 'create']); // Agregar esta línea
+
 
 
 
 Route::get('/admi/User', [UserController::class, 'index'])->name('admin.users.index');
-Route::get('/users/create', [UserController::class, 'create'])->name('users.create.form');
-Route::post('/users/create', [UserController::class, 'store'])->name('users.create');
-Route::get('/users/{id}/edit', [UserController::class, 'index'])->name('users.edit');
-Route::put('/users/update/{id}', [UserController::class, 'index'])->name('users.update');
-
-
-
-
+Route::post('/admi/User/create', [UserController::class, 'store'])->name('admin.users.create');
 
 Auth::routes();
 

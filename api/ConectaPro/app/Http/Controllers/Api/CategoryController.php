@@ -69,9 +69,9 @@ class CategoryController extends Controller
     public function update( Request $request){
         $data = $request->validate([
             'id' => 'required|int',
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'image' => 'required|string',
+            'name' => 'string',
+            'description' => 'string',
+            'image' => 'string',
         ]);
 
         $category =  Category::where('id', '=', $data['id'])->first();

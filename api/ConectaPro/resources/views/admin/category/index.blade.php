@@ -3,34 +3,6 @@
 
 @section('content')
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function(){
-        // Activate tooltip
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        // Select/Deselect checkboxes
-        var checkbox = $('table tbody input[type="checkbox"]');
-        $("#selectAll").click(function(){
-            if(this.checked){
-                checkbox.each(function(){
-                    this.checked = true;                        
-                });
-            } else{
-                checkbox.each(function(){
-                    this.checked = false;                        
-                });
-            } 
-        });
-        checkbox.click(function(){
-            if(!this.checked){
-                $("#selectAll").prop("checked", false);
-            }
-        });
-    });
-</script>
 
 <div class="container-xl">
     <div class="table-responsive">
@@ -61,7 +33,7 @@
                         </th>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Descripcion</th>
+                        <th>Descripción</th>
                         <th>Imagen</th>
                         <th>Acciones</th>
                     </tr>
@@ -72,17 +44,17 @@
                         <tr>
                             <td>
                                 <span class="custom-checkbox">
-                                    <input type="checkbox" id="checkbox{{$category['id']}}" name="options[]" value="{{$category['id']}}">
-                                    <label for="checkbox{{$category['id']}}"></label>
+                                    <input type="checkbox" id="checkbox{{ $category->id }}" name="options[]" value="{{ $category->id }}">
+                                    <label for="checkbox{{ $category->id }}"></label>
                                 </span>
                             </td>
-                            <td>{{$category['id']}}</td>
-                            <td>{{$category['Nombre']}}</td>
-                            <td>{{$category['Descripcion']}}</td>
-                            <td>{{$category['Imagen']}}</td>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->description }}</td>
+                            <td>{{ $category->image }}</td>
                             <td>
                                 <!-- Acciones de edición y eliminación -->
-                                <a href="{{url('/users/' . $category['id'] . '/edit')}}" class="edit" data-toggle="modal">
+                                <a href="#" class="edit" data-toggle="modal" data-target="#editCategoryModal" data-id="{{ $category->id }}" data-image="{{ $category->image }}">
                                     <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
                                 </a>
                                 <a href="#" class="delete" data-toggle="modal">
@@ -95,23 +67,27 @@
             </table>
             <!-- Pagination and Other Elements -->
             <div class="clearfix">
-                <div class="hint-text">Mostrando <b>{{count($category)}}</b> resultados</div>
+                <div class="hint-text">Se encontraron <b>{{ $categories->total() }}</b> resultados</div>
                 <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    {{-- Previous Page Link --}}
+                    @if ($categories->onFirstPage())
+                        <li class="page-item disabled" style="width: auto;"><span class="page-link">Anterior</span></li>
+                    @else
+                        <li class="page-item" style="width: auto;"><a class="page-link btn btn-sm btn-secondary" href="{{ $categories->previousPageUrl() }}" rel="prev">Anterior</a></li>
+                    @endif
+                    {{-- Next Page Link --}}
+                    @if ($categories->hasMorePages())
+                        <li class="page-item" style="width: auto;"><a class="page-link btn btn-sm btn-secondary" href="{{ $categories->nextPageUrl() }}" rel="next">Siguiente</a></li>
+                    @else
+                        <li class="page-item disabled" style="width: auto;"><span class="page-link btn btn-sm btn-secondary">Siguiente</span></li>
+                    @endif
                 </ul>
             </div>
         </div>
-    </div>        
+    </div>
 </div>
 
-<!-- The Modal -->
-<!-- The Modal -->
+<!-- Modal de CREATE -->
 <div class="modal" id="addEmployeeModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -120,12 +96,12 @@
                 <h4 class="modal-title">Agregar Nueva Categoría</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-
             <!-- Modal Body -->
             <div class="modal-body">
                 <!-- Formulario para agregar nueva categoría -->
                 <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="category_id" value="{{ $category->id }}">
                     <!-- Campo Nombre -->
                     <div class="form-group">
                         <label for="name">Nombre:</label>
@@ -141,7 +117,6 @@
                         <label for="image">Imagen:</label>
                         <input type="file" class="form-control-file" id="image" name="image" required>
                     </div>
-
                     <!-- Footer del Modal -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
@@ -152,6 +127,102 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Edición -->
+<div class="modal" id="editCategoryModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Categoría</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Formulario para editar categoría -->
+                <form id="editCategoryForm" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <!-- Campo ID -->
+                    <input type="hidden" id="edit_category_id" name="id">
+
+                    <!-- Campo Nombre -->
+                    <div class="form-group">
+                        <label for="edit_name">Nombre:</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                    </div>
+                    <!-- Campo Descripción -->
+                    <div class="form-group">
+                        <label for="edit_description">Descripción:</label>
+                        <input type="text" class="form-control" id="edit_description" name="description" required>
+                    </div>
+                    <!-- Campo Imagen -->
+                    <div class="form-group">
+                        <label for="edit_image">Imagen:</label>
+                        <!-- Mostrar la imagen actual -->
+                        <img id="edit_image_preview" src="" alt="Imagen actual" class="img-thumbnail">
+                        <input type="file" class="form-control-file" id="edit_image" name="image">
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" id="updateCategoryBtn" class="btn btn-success">Actualizar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+        // Abrir modal de edición al hacer clic en el botón de editar
+        $('.edit').on('click', function() {
+            var category_id = $(this).data('id');
+            var image_name = $(this).data('image');
+            var category_name = $(this).closest('tr').find('td:nth-child(3)').text();
+            var category_description = $(this).closest('tr').find('td:nth-child(4)').text();
+            $('#edit_category_id').val(category_id);
+            $('#edit_name').val(category_name);
+            $('#edit_description').val(category_description);
+            // Mostrar la imagen actual en el modal
+            $('#edit_image_preview').attr('src', '/assets/categories/' + image_name);
+        });
+
+        // Actualizar categoría al hacer clic en el botón de actualizar
+        // Actualizar categoría al hacer clic en el botón de actualizar
+$(document).on('click', '#updateCategoryBtn', function() {
+    var categoryId = $('#edit_category_id').val();
+    var formData = new FormData($('#editCategoryForm')[0]);
+    $.ajax({
+        type: 'POST',
+        url: '/admi/Category/' + categoryId, // URL corregida
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+    console.log(response);
+    // Cerrar el modal
+    $('#editCategoryModal').modal('hide');
+    // Redirigir a la página de índice de categorías
+    window.location.href = "{{ route('admin.category.index') }}";
+},
+
+
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Aquí puedes manejar el error, mostrar un mensaje al usuario, etc.
+        }
+    });
+});
+
+    });
+</script>
 
 
 @endsection

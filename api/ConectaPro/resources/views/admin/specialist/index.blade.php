@@ -118,25 +118,20 @@
 <div class="modal" id="addEmployeeModal">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <!-- Modal Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Agregar Nuevo Especialista</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-
             <!-- Modal Body (Your Form Goes Here) -->
             <div class="modal-body">
-                <!-- Your Form Code Goes Here -->
-                <!-- For example, you can create a form using Laravel's form helpers -->
-                <form action="{{ route('specialists.create') }}" method="POST">
+            <form action="{{ route('admin.specialist.create') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <!-- Your Form Fields Goes Here -->
                     <div class="form-group">
-                        <label for="user_id">Nombre:</label>
+                        <label for="user_id">Nombre del especialista:</label>
                         <select class="form-control" id="user_id" name="user_id" required>
                             @foreach($users as $user)
-                                <option value="{{ $user['id'] }}">{{ $user['name'] }} {{ $user['surname'] }}</option>
+                            <option value="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -144,29 +139,26 @@
                         <label for="category_id">Categoría:</label>
                         <select class="form-control" id="category_id" name="category_id" required>
                             @foreach($categories as $category)
-                                <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="speciality_id">Especialidad:</label>
-                        <select class="form-control" id="speciality_id" name="speciality_id" required>
-                            @foreach($specialities as $speciality)
-                                <option value="{{ $speciality['id'] }}">{{ $speciality['description'] }}</option>
-                            @endforeach
+                        <label for="specialities_id">Especialidad:</label>
+                        <select class="form-control" id="specialities_id" name="specialities_id" required>
+                        @foreach($specialties as $specialty)
+                    <option value="{{ $specialty->id }}">{{ $specialty->description }}</option>
+                @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción:</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
+                        <textarea class="form-control" id="description" name="description" rows="4" maxlength="190" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="image">Imagen:</label>
-                        <input type="text" class="form-control" id="image" name="image" required>
-                    </div>
-                    <!-- Add other form fields as needed -->
-
-                    <!-- Modal Footer -->
+            <label for="image">Imagen:</label>
+            <input type="file" class="form-control-file" id="image" name="image" required>
+        </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -176,7 +168,4 @@
         </div>
     </div>
 </div>
-
-
-
 @endsection

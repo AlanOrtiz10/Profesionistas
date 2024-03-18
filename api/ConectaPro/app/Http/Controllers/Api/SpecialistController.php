@@ -62,7 +62,7 @@ public function item($id) {
         "Updated" => $specialist->updated_at
     ];
 
-    return response()->json($object);
+    return $object;
 }
 
 

@@ -42,8 +42,8 @@
                     </div>
                     <div class="col-sm-6">
                         <!-- Button to Open the Modal -->
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal">
-                            <i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Usuario</span>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSpecialityModal">
+                            <i class="material-icons">&#xE147;</i> <span>Agregar Nueva Especialidad</span>
                         </button>
                         <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>                        
                     </div>
@@ -109,29 +109,29 @@
 </div>
 
 <!-- The Modal -->
-<div class="modal" id="addEmployeeModal">
+<div class="modal" id="addSpecialityModal">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Agregar Nuevo Usuario</h4>
+                <h4 class="modal-title">Agregar Nueva Especialidad</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-
             <!-- Modal Body (Your Form Goes Here) -->
             <div class="modal-body">
                 <!-- Your Form Code Goes Here -->
                 <!-- For example, you can create a form using Laravel's form helpers -->
-                <form action="{{ route('users.create') }}" method="POST">
+                <form action="{{ route('admin.speciality.create') }}" method="POST">
                     @csrf
                     <!-- Your Form Fields Goes Here -->
                     <div class="form-group">
                         <label for="name">Nombre:</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
-                    <!-- Add other form fields as needed -->
-
+                    <div class="form-group">
+                        <label for="description">Descripción:</label>
+                        <textarea class="form-control" id="description" name="description" required></textarea>
+                    </div>
                     <!-- Modal Footer -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
@@ -142,5 +142,8 @@
         </div>
     </div>
 </div>
+
+
+
 
 @endsection

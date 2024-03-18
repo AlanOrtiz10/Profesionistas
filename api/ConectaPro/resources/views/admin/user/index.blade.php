@@ -131,14 +131,41 @@
             <div class="modal-body">
                 <!-- Your Form Code Goes Here -->
                 <!-- For example, you can create a form using Laravel's form helpers -->
-                <form action="{{ route('users.create') }}" method="POST">
+                <form action="{{ route('admin.users.create') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!-- Your Form Fields Goes Here -->
                     <div class="form-group">
                         <label for="name">Nombre:</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
-                    <!-- Add other form fields as needed -->
+                    <div class="form-group">
+                        <label for="surname">Apellido:</label>
+                        <input type="text" class="form-control" id="surname" name="surname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono:</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Nivel:</label>
+                        <select class="form-control" id="level" name="level" required>
+                            @foreach($levels as $level)
+                                <option value="{{ $level->id }}">{{ $level->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Imagen:</label>
+                        <input type="file" class="form-control-file" id="image" name="image" required>
+                    </div>
 
                     <!-- Modal Footer -->
                     <div class="modal-footer">
@@ -150,5 +177,6 @@
         </div>
     </div>
 </div>
+
 
 @endsection
