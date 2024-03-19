@@ -33,6 +33,23 @@
 </script>
 
 <div class="container-xl">
+    <!-- Alertas de notificación -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 20px;"> <!-- Añadido estilo para margen superior -->
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 20px;"> <!-- Añadido estilo para margen superior -->
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
@@ -71,32 +88,37 @@
                 </thead>
                 <!-- Table Body -->
                 <tbody>
-                    @foreach($services as $service)
-                        <tr>
-                            <td>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="checkbox{{$service['id']}}" name="options[]" value="{{$service['id']}}">
-                                    <label for="checkbox{{$service['id']}}"></label>
-                                </span>
-                            </td>
-                            <td>{{$service['id']}}</td>
-                            <td>{{$service['Nombre']}}</td>
-                            <td>{{$service['Descripcion']}}</td>
-                            <td>{{$service['ID_Categoria']}}</td>
-                            <td>{{$service['Imagen']}}</td>
-                            <td>{{$service['Disponibilidad']}}</td>
-                            <td>{{$service['ID_Especialista']['name']}} {{$service['ID_Especialista']['surname']}}</td>
-                            <td>
-                                <!-- Acciones de edición y eliminación -->
-                                <a href="{{url('/users/' . $service['id'] . '/edit')}}" class="edit" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
-                                </a>
-                                <a href="#" class="delete" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
+                @foreach($services as $service)
+<tr>
+    <td>
+        <span class="custom-checkbox">
+            <input type="checkbox" id="checkbox{{$service['id']}}" name="options[]" value="{{$service['id']}}">
+            <label for="checkbox{{$service['id']}}"></label>
+        </span>
+    </td>
+    <td>{{$service['id']}}</td>
+    <td>{{$service['Nombre']}}</td>
+    <td>{{$service['Descripcion']}}</td>
+    <td>{{$service['ID_Categoria']['name']}}</td>
+    <td>{{$service['Imagen']}}</td>
+    <td>{{$service['Disponibilidad']}}</td>
+    <td>{{$service['ID_Especialista']['name']}} {{$service['ID_Especialista']['surname']}}</td>
+    <td class="d-flex align-items-center">
+        <a href="#" class="edit mr-3" data-toggle="modal" data-target="#editServiceModal" data-id="{{ $service['id'] }}" data-name="{{ $service['Nombre'] }}" data-description="{{ $service['Descripcion'] }}" data-category-id="{{ $service['ID_Categoria']['id'] }}" data-specialist-id="{{ $service['ID_Especialista']['id'] }}" data-image="{{ $service['Imagen'] }}" data-availability="{{ $service['Disponibilidad'] }}" data-specialist="{{ $service['ID_Especialista']['name'] }} {{ $service['ID_Especialista']['surname'] }}">
+            <i class="material-icons" data-toggle="tooltip" title="Editar" style="font-size: 25px;">&#xE254;</i>
+        </a>
+        <form action="{{ route('admin.service.destroy', $service['id']) }}" method="POST" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este servicio?')">
+                <i class="material-icons text-danger" data-toggle="tooltip" title="Eliminar" style="font-size: 25px;">delete</i>
+            </button>
+        </form>
+    </td>
+</tr>
+@endforeach
+
+
                 </tbody>
             </table>
             <!-- Pagination and Other Elements -->
@@ -177,6 +199,136 @@
     </div>
 </div>
 
+<!-- Modal de Edición -->
+<div class="modal" id="editServiceModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Servicio</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+            <form id="editServiceForm" method="POST" enctype="multipart/form-data">
+            @method('PUT')
+                    @csrf
+                   
+                    <input type="hidden" id="edit_id" name="id">
+                    <div class="form-group">
+                        <label for="edit_name">Nombre:</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_description">Descripción:</label>
+                        <textarea class="form-control" id="edit_description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_category_id">Categoría:</label>
+                        <select class="form-control" id="edit_category_id" name="category_id" required>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_image">Imagen:</label>
+                        <img id="edit_image_preview" src="" alt="Imagen Actual" class="img-thumbnail">
+                        <input type="file" class="form-control-file" id="edit_image" name="image">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_availability">Disponibilidad:</label>
+                        <select class="form-control" id="edit_availability" name="availability" required>
+                            <option value="Disponible">Disponible</option>
+                            <option value="Fuera de servicio">Fuera de servicio</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_specialist_id">Especialista:</label>
+                        <select class="form-control" id="edit_specialist_id" name="specialist_id" required>
+                            @foreach($specialists as $specialist)
+                                <option value="{{ $specialist->id }}">{{ $specialist->user->name }} {{ $specialist->user->surname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+
+<script>
+$(document).ready(function() {
+    // Función para mostrar el modal de edición y completar el formulario con los datos del servicio
+    $('#editServiceModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        var name = button.data('name');
+        var description = button.data('description');
+        var category_id = button.data('category-id');
+        var specialist_id = button.data('specialist-id');
+        var image = button.data('image');
+        var availability = button.data('availability');
+
+        var modal = $(this);
+        modal.find('#edit_id').val(id);
+        modal.find('#edit_name').val(name);
+        modal.find('#edit_description').val(description);
+
+        // Seleccionar la opción correcta en el select de categoría
+        modal.find('#edit_category_id option[value="' + category_id + '"]').prop('selected', true);
+
+        // Seleccionar la opción correcta en el select de especialista
+        modal.find('#edit_specialist_id').val(specialist_id);
+
+        // Mostrar la imagen actual
+        var imgPath = "{{ asset('assets/services') }}/" + image;
+        modal.find('#edit_image_preview').attr('src', imgPath);
+
+        // Seleccionar la opción correcta en el select de disponibilidad
+        modal.find('#edit_availability').val(availability);
+    });
+
+    // Función para enviar el formulario de edición por AJAX
+    $('#editServiceForm').submit(function(e) {
+    e.preventDefault(); // Evitar el envío predeterminado del formulario
+    var formData = new FormData(this);
+    var serviceId = $('#edit_id').val(); // Obtener el ID del servicio
+    formData.append('_method', 'PUT'); // Agregar el método PUT
+    $.ajax({
+        url: '/admin/service/update/' + serviceId,
+        type: 'POST', // Cambiar el método a POST
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Incluir el token CSRF
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            console.log(response);
+            // Actualizar la tabla o realizar cualquier otra acción necesaria
+            // Cerrar el modal de edición
+            $('#editServiceModal').modal('hide');
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Manejar errores de validación u otros errores
+        }
+    });
+});
+
+
+});
+
+
+</script>
 
 @endsection

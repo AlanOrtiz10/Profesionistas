@@ -13,40 +13,48 @@ class ServiceController extends Controller
         $services = Service::with('user', 'specialist', 'category')->get();
         $list = [];
         foreach($services as $service) {
+            $categoryID = $service->category ? $service->category->id : null;
             $categoryName = $service->category ? $service->category->name : null;
             $object = [
                 "id" => $service->id,
                 "Nombre" => $service->name,
                 "Descripcion" => $service->description,
-                "ID_Categoria" => $categoryName, 
+                "ID_Categoria" => [
+                    "id" => $categoryID,
+                    "name" => $categoryName,
+                ],
                 "Imagen" => $service->image,
                 "Disponibilidad" => $service->availability,
                 "ID_Especialista" => [
                     "id" => $service->specialist->id,
                     "name" => $service->specialist->name,
                     "surname" => $service->specialist->surname,
-                ],                
+                ],
                 "ID_Usuario" => $service->user_id,
                 "Created" => $service->updated_at,
                 "Updated" => $service->updated_at
-    
             ];
             array_push($list, $object);
         }
         return $list;
     }
     
+    
 
     public function item($id) {
         $service = Service::with('user', 'specialist', 'category')->findOrFail($id);
     
         $categoryName = $service->category ? $service->category->name : null;
-    
+        $categoryID = $service->category ? $service->category->id : null;
+
         $object = [
             "id" => $service->id,
             "Nombre" => $service->name,
             "Descripcion" => $service->description,
-            "ID_Categoria" => $categoryName,
+            "ID_Categoria" => [
+                "id" => $categoryID,
+                "name" => $categoryName,
+            ],
             "Imagen" => $service->image,
             "Disponibilidad" => $service->availability,
             "ID_Especialista" => [
@@ -109,8 +117,8 @@ class ServiceController extends Controller
             'category_id' => 'required|integer',
             'image' => 'required|string',
             'availability' => 'required|string',
-            'user_id' => 'required|int',
-            'specialist_id' => 'required|int',
+            'user_id' => 'int',
+            'specialist_id' => 'int',
         ]);
     
         $service = Service::find($data['id']);
@@ -138,6 +146,29 @@ class ServiceController extends Controller
                 "response" => 'Error: Something went wrong, please try again.'
             ];
             return response()->json($object);
+        }
+    }
+
+    public function delete($id) {
+        $service = Service::find($id);
+    
+        if (!$service) {
+            $object = [
+                "response" => 'Error: Service not found.',
+            ];
+            return response()->json($object, 404);
+        }
+    
+        if ($service->delete()) {
+            $object = [
+                "response" => 'Success. Service deleted successfully.',
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong while deleting the Service.',
+            ];
+            return response()->json($object, 500);
         }
     }
     

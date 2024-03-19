@@ -52,15 +52,21 @@
                             <td>{{ $category->name }}</td>
                             <td>{{ $category->description }}</td>
                             <td>{{ $category->image }}</td>
-                            <td>
-                                <!-- Acciones de edición y eliminación -->
-                                <a href="#" class="edit" data-toggle="modal" data-target="#editCategoryModal" data-id="{{ $category->id }}" data-image="{{ $category->image }}">
-                                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
-                                </a>
-                                <a href="#" class="delete" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
-                                </a>
-                            </td>
+    <td class="d-flex align-items-center">
+    <!-- Acciones de edición y eliminación -->
+    <a href="#" class="edit" data-toggle="modal" data-target="#editCategoryModal" data-id="{{ $category->id }}" data-image="{{ $category->image }}">
+        <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
+    </a>
+    <!-- Formulario para enviar solicitud de eliminación -->
+    <form action="{{ route('admin.category.destroy', $category->id) }}" method="POST" class="d-inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')">
+            <i class="material-icons" data-toggle="tooltip" title="Editar"style="color: red;">delete</i>
+        </button>
+    </form>
+</td>
+
                         </tr>
                     @endforeach
                 </tbody>

@@ -141,11 +141,29 @@ class RecommendationController extends Controller
             return response()->json($object);
         }
     }
+
+    public function delete($id) {
+        $recommendation = Recommendation::find($id);
     
-
-
-
-
-
+        if (!$recommendation) {
+            $object = [
+                "response" => 'Error: Recomendacion no encontrada.',
+            ];
+            return response()->json($object, 404);
+        }
+    
+        if ($recommendation->delete()) {
+            $object = [
+                "response" => 'Éxito. Recomendacion eliminada correctamente.',
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Algo salió mal al eliminar la Recomendacion.',
+            ];
+            return response()->json($object, 500);
+        }
+    }
+    
 
 }

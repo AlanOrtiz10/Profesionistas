@@ -37,12 +37,16 @@ Route::get('/categories', [CategoryController::class, 'list']);
 Route::get('/categories/{id}', [CategoryController::class, 'item']);
 Route::post('/categories/create', [CategoryController::class, 'create']);
 Route::post('/categories/update', [CategoryController::class, 'update']);
+Route::delete('/categories/delete/{id}', [CategoryController::class, 'delete']);
+
 
 
 Route::get('/specialities', [SpecialityController::class, 'list']);
 Route::get('/specialities/{id}', [SpecialityController::class, 'item']);
 Route::post('/specialities/create', [SpecialityController::class, 'create']);
 Route::post('/specialities/update', [SpecialityController::class, 'update']);
+Route::delete('/specialities/delete/{id}', [SpecialityController::class, 'delete']);
+
 
 
 
@@ -50,6 +54,8 @@ Route::get('/services', [ServiceController::class, 'list']);
 Route::get('/services/{id}', [ServiceController::class, 'item']);
 Route::post('/services/create', [ServiceController::class, 'create']);
 Route::post('/services/update', [ServiceController::class, 'update']);
+Route::delete('/services/delete/{id}', [ServiceController::class, 'delete']);
+
 
 
 
@@ -72,6 +78,8 @@ Route::get('/recommendations', [RecommendationController::class, 'list']);
 Route::get('/recommendations/{id}', [RecommendationController::class, 'item']);
 Route::post('/recommendations/create', [RecommendationController::class, 'create']);
 Route::post('/recommendations/update', [RecommendationController::class, 'update']);
+Route::delete('/recommendations/delete/{id}', [RecommendationController::class, 'delete']);
+
 
 
 Route::post('/login', [AuthController::class, 'login']);

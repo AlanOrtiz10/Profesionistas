@@ -32,6 +32,8 @@ Route::get('/admi/Category', [CategoryController::class, 'index'])->name('admin.
 Route::post('/admi/Category', [CategoryController::class, 'store'])->name('admin.category.store');
 Route::get('/admi/Category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
 Route::put('/admi/Category/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+Route::delete('/admi/service/{id}', [ServiceController::class, 'destroy'])->name('admin.service.destroy');
+Route::delete('/admin/category/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
 
 
 
@@ -40,9 +42,22 @@ Route::get('/admi/Recommendation', [RecommendationController::class, 'index'])->
 Route::get('/admi/Recommendation/create', [RecommendationController::class, 'create'])->name('admin.recommendation.create');
 Route::post('/admi/Recommendation', [RecommendationController::class, 'store'])->name('admin.recommendation.store');
 Route::get('/get-services/{specialistId}', [RecommendationController::class, 'getServices']);
+Route::get('/admi/Recommendation/{id}/edit', [RecommendationController::class, 'edit'])->name('admin.recommendation.edit');
+Route::put('/admi/Recommendation/{id}', [RecommendationController::class, 'update'])->name('admin.recommendation.update');
+Route::get('/get-service-name/{id}', [RecommendationController::class, 'getServiceName']);
+Route::delete('/admi/Recommendation/{id}', [RecommendationController::class, 'destroy'])->name('admin.recommendation.destroy');
+
+
+
+
+
 
 Route::get('/admi/Service', [ServiceController::class, 'index'])->name('admin.service.index');
 Route::post('/admi/Service', [ServiceController::class, 'store'])->name('admin.service.store');
+Route::put('/admin/service/update/{id}', [ServiceController::class, 'update'])->name('admin.service.update');
+Route::delete('/admin/service/{id}', [ServiceController::class, 'destroy'])->name('admin.service.destroy');
+
+
 
 Route::get('/admi/Specialist', [SpecialistController::class, 'index'])->name('admin.specialist.index');
 Route::post('/admi/Specialist', [SpecialistController::class, 'create'])->name('admin.specialist.create');
@@ -50,6 +65,9 @@ Route::post('/admi/Specialist', [SpecialistController::class, 'create'])->name('
 Route::get('/admi/Speciality', [SpecialityController::class, 'index'])->name('admin.speciality.index');
 Route::get('/admi/Speciality/create', [SpecialityController::class, 'create'])->name('admin.speciality.create');
 Route::post('/admi/Speciality/create', [SpecialityController::class, 'create']); // Agregar esta línea
+Route::put('/specialities/update', [SpecialityController::class, 'update'])->name('admin.speciality.update');
+Route::delete('/admi/Speciality/{id}', [SpecialityController::class, 'destroy'])->name('admin.speciality.destroy');
+
 
 
 

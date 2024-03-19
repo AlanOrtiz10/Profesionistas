@@ -92,6 +92,30 @@ class SpecialityController extends Controller
             return response()->json($object);
         }
     }
+
+    public function delete($id) {
+        $speciality = Speciality::find($id);
+    
+        if (!$speciality) {
+            $object = [
+                "response" => 'Error: Especialidad no encontrada.',
+            ];
+            return response()->json($object, 404);
+        }
+    
+        if ($speciality->delete()) {
+            $object = [
+                "response" => 'Éxito. Especialidad eliminada correctamente.',
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Algo salió mal al eliminar la especialidad.',
+            ];
+            return response()->json($object, 500);
+        }
+    }
+    
     
 
 }

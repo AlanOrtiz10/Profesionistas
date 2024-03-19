@@ -96,6 +96,30 @@ class CategoryController extends Controller
         
     }
 
+    public function delete($id) {
+        $category = Category::find($id);
+    
+        if (!$category) {
+            $object = [
+                "response" => 'Error: Category not found.',
+            ];
+            return response()->json($object, 404);
+        }
+    
+        if ($category->delete()) {
+            $object = [
+                "response" => 'Success. Category deleted successfully.',
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong while deleting the category.',
+            ];
+            return response()->json($object, 500);
+        }
+    }
+    
+
 
    
      
