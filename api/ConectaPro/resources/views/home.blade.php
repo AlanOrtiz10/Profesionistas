@@ -557,8 +557,8 @@ section#about {
         <ul class="nav__links">
             <li class="link"><a href="#header">Inicio</a></li>
             <li class="link"><a href="#destination">Servicios</a></li>
-            <li class="link"><a href="#trip">Precios</a></li>
-            <li class="link"><a href="#gallary">Opiniones</a></li>
+            <li class="link"><a href="#trip">Opiniones</a></li>
+            <li class="link"><a href="#gallary">Proyectos</a></li>
         </ul>
         <div class="nav__buttons">
         <button class="btn" onclick="window.location.href='{{ route('login') }}'">Iniciar sesión</button>
