@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('image')->default('placeholder.png');
             $table->string('availability')->default('Disponible');
             $table->integer('specialist_id');
-            $table->integer('service_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
