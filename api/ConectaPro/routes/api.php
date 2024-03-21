@@ -63,6 +63,7 @@ Route::get('/users', [UserController::class, 'list']);
 Route::get('/users/{id}', [UserController::class, 'item']);
 Route::post('/users/create', [UserController::class, 'create']);
 Route::post('/users/update', [UserController::class, 'update']);
+Route::delete('/users/delete/{id}', [UserController::class, 'delete']);
 
 
 
@@ -71,6 +72,8 @@ Route::get('/specialists', [SpecialistController::class, 'list']);
 Route::get('/specialists/{id}', [SpecialistController::class, 'item']);
 Route::post('/specialists/create', [SpecialistController::class, 'create']);
 Route::post('/specialists/update', [SpecialistController::class, 'update']);
+Route::delete('/specialists/delete/{id}', [SpecialistController::class, 'delete']);
+
 
 
 

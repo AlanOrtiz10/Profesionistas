@@ -135,6 +135,29 @@ public function item($id) {
         }
     }
     
+
+    public function delete($id) {
+        $specialist = Specialist::find($id);
+    
+        if (!$specialist) {
+            $object = [
+                "response" => 'Error: Service not found.',
+            ];
+            return response()->json($object, 404);
+        }
+    
+        if ($specialist->delete()) {
+            $object = [
+                "response" => 'Success. Service deleted successfully.',
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Something went wrong while deleting the Service.',
+            ];
+            return response()->json($object, 500);
+        }
+    }
     
 
 

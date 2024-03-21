@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ServiceController;
@@ -25,6 +26,10 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/old', function () {
     return view('welcome');
 });
+
+Route::get('/config', [PanelController::class, 'config'])->name('config');
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/admi', [PanelController::class, 'index'])->name('admin');
 
@@ -54,13 +59,18 @@ Route::delete('/admi/Recommendation/{id}', [RecommendationController::class, 'de
 
 Route::get('/admi/Service', [ServiceController::class, 'index'])->name('admin.service.index');
 Route::post('/admi/Service', [ServiceController::class, 'store'])->name('admin.service.store');
-Route::put('/admin/service/update/{id}', [ServiceController::class, 'update'])->name('admin.service.update');
 Route::delete('/admin/service/{id}', [ServiceController::class, 'destroy'])->name('admin.service.destroy');
+Route::put('/admin/service/{id}', [ServiceController::class, 'update'])->name('admin.service.update');
 
 
 
 Route::get('/admi/Specialist', [SpecialistController::class, 'index'])->name('admin.specialist.index');
 Route::post('/admi/Specialist', [SpecialistController::class, 'create'])->name('admin.specialist.create');
+Route::get('/admin/specialist/{id}', [SpecialistController::class, 'show']);
+Route::delete('/admi/specialist/{id}', [SpecialistController::class, 'destroy'])->name('admin.specialist.destroy');
+Route::put('/admi/specialist/{id}', [SpecialistController::class, 'update'])->name('admin.specialist.update');
+
+
 
 Route::get('/admi/Speciality', [SpecialityController::class, 'index'])->name('admin.speciality.index');
 Route::get('/admi/Speciality/create', [SpecialityController::class, 'create'])->name('admin.speciality.create');
@@ -74,7 +84,8 @@ Route::delete('/admi/Speciality/{id}', [SpecialityController::class, 'destroy'])
 
 Route::get('/admi/User', [UserController::class, 'index'])->name('admin.users.index');
 Route::post('/admi/User/create', [UserController::class, 'store'])->name('admin.users.create');
+Route::delete('/admi/User/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

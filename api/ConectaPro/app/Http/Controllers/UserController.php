@@ -60,6 +60,37 @@ public function store(Request $request)
 }
 
 
+public function destroy($id)
+{
+    // Buscar la categoría por su ID
+    $user = User::findOrFail($id);
+
+    // Verificar si la categoría existe y eliminarla
+    if ($user->delete()) {
+        // Eliminar la imagen asociada si no es "placeholder.jpg"
+        if ($user->image != 'placeholder.jpg') {
+            // Construir la ruta completa de la imagen
+            $imagePath = public_path('assets/users/') . $user->image;
+
+            // Verificar si el archivo de imagen existe antes de intentar eliminarlo
+            if (file_exists($imagePath)) {
+                // Eliminar la imagen
+                unlink($imagePath);
+            }
+        }
+
+        // Redirigir a la página de índice de categorías con un mensaje de éxito
+        return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado correctamente.');
+    } else {
+        // Manejar el error si la eliminación falla
+        // Esto podría incluir la visualización de un mensaje de error al usuario
+        // y redirigir a la página anterior o a una página de error.
+        return back()->withErrors(['error' => 'Error al eliminar el usuario.']);
+    }
+}
+
+
+
 
     // Otros métodos del controlador...
 }

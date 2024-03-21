@@ -127,6 +127,29 @@ class UserController extends Controller
         }
     }
 
+    public function delete($id) {
+        $user = User::find($id);
+    
+        if (!$user) {
+            $object = [
+                "response" => 'Error: Usuario no encontrado.',
+            ];
+            return response()->json($object, 404);
+        }
+    
+        if ($user->delete()) {
+            $object = [
+                "response" => 'Éxito. Usuario eliminado correctamente.',
+            ];
+            return response()->json($object);
+        } else {
+            $object = [
+                "response" => 'Error: Algo salió mal al eliminar el usuario.',
+            ];
+            return response()->json($object, 500);
+        }
+    }
+
 
 
 }

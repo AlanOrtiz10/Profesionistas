@@ -96,6 +96,7 @@
             <label for="checkbox{{$service['id']}}"></label>
         </span>
     </td>
+    
     <td>{{$service['id']}}</td>
     <td>{{$service['Nombre']}}</td>
     <td>{{$service['Descripcion']}}</td>
@@ -210,9 +211,9 @@
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
-            <form id="editServiceForm" method="POST" enctype="multipart/form-data">
-            @method('PUT')
+            <form action="{{ route('admin.service.update', ['id' => '__service_id']) }}" method="POST" enctype="multipart/form-data" id="editServiceForm">
                     @csrf
+                    @method('PUT')
                    
                     <input type="hidden" id="edit_id" name="id">
                     <div class="form-group">
@@ -233,10 +234,15 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="edit_image">Imagen:</label>
-                        <img id="edit_image_preview" src="" alt="Imagen Actual" class="img-thumbnail">
-                        <input type="file" class="form-control-file" id="edit_image" name="image">
-                    </div>
+    <label for="edit_image">Imagen:</label>
+    @if($service['Imagen'] != 'placeholder.jpg')
+        <img id="edit_image_preview" src="{{ asset('assets/services/'.$service['Imagen']) }}" alt="Imagen Actual" class="img-thumbnail">
+    @else
+        <img id="edit_image_preview" src="{{ asset('assets/services/placeholder.jpg') }}" alt="Imagen Placeholder" class="img-thumbnail">
+    @endif
+    <input type="file" class="form-control-file" id="edit_image" name="image">
+</div>
+
                     <div class="form-group">
                         <label for="edit_availability">Disponibilidad:</label>
                         <select class="form-control" id="edit_availability" name="availability" required>
@@ -265,68 +271,36 @@
 
 
 <script>
-$(document).ready(function() {
-    // Función para mostrar el modal de edición y completar el formulario con los datos del servicio
-    $('#editServiceModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var id = button.data('id');
-        var name = button.data('name');
-        var description = button.data('description');
-        var category_id = button.data('category-id');
-        var specialist_id = button.data('specialist-id');
-        var image = button.data('image');
-        var availability = button.data('availability');
+$('#editServiceModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget);
+    var id = button.data('id');
+    var name = button.data('name');
+    var description = button.data('description');
+    var category_id = button.data('category-id');
+    var specialist_id = button.data('specialist-id');
+    var availability = button.data('availability');
+    var image = button.data('image');
 
-        var modal = $(this);
-        modal.find('#edit_id').val(id);
-        modal.find('#edit_name').val(name);
-        modal.find('#edit_description').val(description);
+    var modal = $(this);
+    modal.find('#edit_id').val(id);
+    modal.find('#edit_name').val(name);
+    modal.find('#edit_description').val(description);
+    modal.find('#edit_category_id').val(category_id);
+    modal.find('#edit_specialist_id').val(specialist_id);
+    modal.find('#edit_availability').val(availability);
 
-        // Seleccionar la opción correcta en el select de categoría
-        modal.find('#edit_category_id option[value="' + category_id + '"]').prop('selected', true);
+    // Mostrar la imagen actual o el placeholder según corresponda
+    if (image != 'placeholder.jpg') {
+        modal.find('#edit_image_preview').attr('src', "{{ asset('assets/services') }}/" + image);
+    } else {
+        modal.find('#edit_image_preview').attr('src', "{{ asset('assets/services/placeholder.jpg') }}");
+    }
 
-        // Seleccionar la opción correcta en el select de especialista
-        modal.find('#edit_specialist_id').val(specialist_id);
-
-        // Mostrar la imagen actual
-        var imgPath = "{{ asset('assets/services') }}/" + image;
-        modal.find('#edit_image_preview').attr('src', imgPath);
-
-        // Seleccionar la opción correcta en el select de disponibilidad
-        modal.find('#edit_availability').val(availability);
-    });
-
-    // Función para enviar el formulario de edición por AJAX
-    $('#editServiceForm').submit(function(e) {
-    e.preventDefault(); // Evitar el envío predeterminado del formulario
-    var formData = new FormData(this);
-    var serviceId = $('#edit_id').val(); // Obtener el ID del servicio
-    formData.append('_method', 'PUT'); // Agregar el método PUT
-    $.ajax({
-        url: '/admin/service/update/' + serviceId,
-        type: 'POST', // Cambiar el método a POST
-        data: formData,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Incluir el token CSRF
-        },
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-            console.log(response);
-            // Actualizar la tabla o realizar cualquier otra acción necesaria
-            // Cerrar el modal de edición
-            $('#editServiceModal').modal('hide');
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            // Manejar errores de validación u otros errores
-        }
-    });
+    // Establecer la acción del formulario con el ID correcto del servicio
+    var form = modal.find('#editServiceForm');
+    form.attr('action', form.attr('action').replace('__service_id', id));
 });
 
-
-});
 
 
 </script>

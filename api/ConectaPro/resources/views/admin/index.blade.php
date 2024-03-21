@@ -5,9 +5,13 @@
 @section('content')
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Inicio</h1>
+        <h1 class="mt-4" style="color: #212529">Bienvenido 
+        @auth
+            {{ auth()->user()->name }}
+        @endauth
+        </h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Bienvenido al panel administrativo.</li>
+            <li class="breadcrumb-item active">{{auth()->user()->level->name }}</li>
         </ol>
         <div class="row">
             <div class="col-xl-3 col-md-6">

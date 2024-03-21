@@ -58,5 +58,96 @@ class SpecialistController extends Controller
         // Redirigir a la página de inicio o a donde desees
         return redirect()->route('admin.specialist.index')->with('success', 'Especialista creado correctamente');
     }
+
+    public function destroy($id)
+{
+    // Buscar la categoría por su ID
+    $specialist = Specialist::findOrFail($id);
+
+    // Verificar si la categoría existe y eliminarla
+    if ($specialist->delete()) {
+        // Eliminar la imagen asociada si no es "placeholder.jpg"
+        if ($specialist->image != 'placeholder.jpg') {
+            // Construir la ruta completa de la imagen
+            $imagePath = public_path('assets/specialists/') . $specialist->image;
+
+            // Verificar si el archivo de imagen existe antes de intentar eliminarlo
+            if (file_exists($imagePath)) {
+                // Eliminar la imagen
+                unlink($imagePath);
+            }
+        }
+
+        // Redirigir a la página de índice de categorías con un mensaje de éxito
+        return redirect()->route('admin.specialist.index')->with('success', 'Especialista eliminado correctamente.');
+    } else {
+        // Manejar el error si la eliminación falla
+        // Esto podría incluir la visualización de un mensaje de error al usuario
+        // y redirigir a la página anterior o a una página de error.
+        return back()->withErrors(['error' => 'Error al eliminar la categoría.']);
+    }
+}
+
+
+public function update(Request $request, $id) {
+    // Validar los datos de entrada
+    $validatedData = $request->validate([
+        'user_id' => 'required|int',
+        'category_id' => 'required|int',
+        'specialities_id' => 'required|int',
+        'description' => 'required|string|max:190',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Buscar al especialista por su ID
+    $specialist = Specialist::find($id);
+
+    // Verificar si el especialista existe
+    if (!$specialist) {
+        return response()->json(['error' => 'Especialista no encontrado'], 404);
+    }
+
+    // Actualizar los campos del especialista
+    $specialist->user_id = $validatedData['user_id'];
+    $specialist->category_id = $validatedData['category_id'];
+    $specialist->specialities_id = $validatedData['specialities_id'];
+    $specialist->description = $validatedData['description'];
+
+    // Procesar y actualizar la imagen si se proporciona una nueva
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('assets/specialists'), $imageName);
+
+        // Eliminar la imagen anterior si no es la imagen de marcador de posición
+        if ($specialist->image !== 'placeholder.jpg') {
+            $oldImagePath = public_path('assets/specialists/') . $specialist->image;
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
+        $specialist->image = $imageName;
+    }
+
+   // Guardar los cambios
+if ($specialist->save()) {
+    // Redirigir a la página de índice de especialistas con un mensaje de éxito
+    return redirect()->route('admin.specialist.index')->with('success', 'Especialista actualizado correctamente.');
+} else {
+    // En caso de error al guardar los cambios, mostrar un mensaje de error
+    return back()->withErrors(['error' => 'Error: Algo salió mal, por favor inténtalo de nuevo.']);
+}
+
+}
+
+
+
+
+
+
+
+
+
     
 }

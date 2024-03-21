@@ -33,6 +33,23 @@
 </script>
 
 <div class="container-xl">
+    <!-- Alertas de notificación -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 20px;"> <!-- Añadido estilo para margen superior -->
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 20px;"> <!-- Añadido estilo para margen superior -->
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
@@ -86,14 +103,18 @@
                             <td>{{$user['Telefono']}}</td>
                             <td>{{$user['Nivel']['name']}}</td>
                             <td>{{$user['Imagen']}}</td>
-                            <td>
+                            <td class="d-flex align-items-center">
                                 <!-- Acciones de edición y eliminación -->
-                                <a href="{{url('/users/' . $user['id'] . '/edit')}}" class="edit" data-toggle="modal">
+                                <a href="{{url('/users/' . $user['id'] . '/edit')}}" class="edit mr-3" data-toggle="modal">
                                     <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
                                 </a>
-                                <a href="#" class="delete" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i>
-                                </a>
+                                <form action="{{ route('admin.users.destroy', $user['id']) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">
+                                    <i class="material-icons text-danger" data-toggle="tooltip" title="Eliminar" style="font-size: 25px;">delete</i>
+                                </button>
+                            </form>
                             </td>
                         </tr>
                     @endforeach

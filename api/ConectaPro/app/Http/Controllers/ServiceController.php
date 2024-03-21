@@ -13,6 +13,7 @@ class ServiceController extends Controller
 
     public function index() 
     {
+        
         $apiServiceController = new ApiServiceController();
         $services = $apiServiceController->list();
         $categories = Category::all();
@@ -90,35 +91,6 @@ class ServiceController extends Controller
     return redirect()->route('admin.service.index')->with('success', '¡El servicio se ha creado correctamente!');
 }
 
-public function update(Request $request, $id)
-{
-    $data = $request->validate([
-        'name' => 'required|string',
-        'description' => 'required|string',
-        'category_id' => 'required|exists:categories,id',
-        'image' => 'nullable|image',
-        'availability' => 'required|string',
-        'specialist_id' => 'integer',
-
-    ]);
-
-    $service = Service::findOrFail($id);
-
-    if ($request->hasFile('image')) {
-        $imageName = uniqid() . '.' . $request->image->getClientOriginalExtension();
-        $request->image->move(public_path('assets/services'), $imageName);
-        $service->image = $imageName;
-    }
-
-    $service->name = $data['name'];
-    $service->description = $data['description'];
-    $service->category_id = $data['category_id'];
-    $service->availability = $data['availability'];
-    $service->specialist_id = $data['specialist_id'];
-    $service->save();
-
-    return response()->json(['message' => '¡El servicio se ha actualizado correctamente!']);
-}
 
 public function destroy($id)
 {
@@ -148,6 +120,47 @@ public function destroy($id)
         return back()->withErrors(['error' => 'Error al eliminar la categoría.']);
     }
 }
+
+public function update(Request $request, $id)
+{
+    $data = $request->validate([
+        'name' => 'required|string',
+        'description' => 'required|string',
+        'category_id' => 'required|integer',
+        'image' => 'sometimes|image',
+        'availability' => 'required|string',
+        'specialist_id' => 'required|integer',
+    ]);
+
+    // Obtener el servicio a actualizar
+    $service = Service::find($id);
+
+    if (!$service) {
+        return back()->withErrors(['error' => 'Servicio no encontrado.']);
+    }
+
+    // Actualizar los campos
+    $service->name = $data['name'];
+    $service->description = $data['description'];
+    $service->category_id = $data['category_id'];
+    $service->availability = $data['availability'];
+    $service->specialist_id = $data['specialist_id'];
+
+    // Si se proporciona una nueva imagen, actualizarla
+    if ($request->hasFile('image')) {
+        $imageName = uniqid() . '.' . $request->image->getClientOriginalExtension();
+        $request->image->move(public_path('assets/services'), $imageName);
+        $service->image = $imageName;
+    }
+
+    // Guardar los cambios
+    if ($service->save()) {
+        return redirect()->route('admin.service.index')->with('success', '¡El servicio se ha actualizado correctamente!');
+    } else {
+        return back()->withErrors(['error' => 'Error al actualizar el servicio. Por favor, inténtelo de nuevo.']);
+    }
+}
+
 
 
 }
