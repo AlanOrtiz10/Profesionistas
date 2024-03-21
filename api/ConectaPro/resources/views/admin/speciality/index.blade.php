@@ -34,7 +34,6 @@
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSpecialityModal">
                             <i class="material-icons">&#xE147;</i> <span>Agregar Nueva Especialidad</span>
                         </button>
-                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>                        
                     </div>
                 </div>
             </div>
@@ -84,7 +83,7 @@
                 </tbody>
             </table>
             <div class="clearfix">
-                <div class="hint-text">Mostrando <b>{{ $specialities->count() }}</b> resultados</div>
+            <div class="hint-text">Se encontraron <b>{{ $specialities->total() }}</b> resultados</div>
                 <ul class="pagination">
                     @if ($specialities->lastPage() > 1)
                         @for ($i = 1; $i <= $specialities->lastPage(); $i++)

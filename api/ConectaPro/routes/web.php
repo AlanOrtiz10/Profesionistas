@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PanelController;
@@ -27,7 +28,11 @@ Route::get('/old', function () {
     return view('welcome');
 });
 
+
 Route::get('/config', [PanelController::class, 'config'])->name('config');
+Route::get('/search', [PanelController::class, 'search'])->name('search');
+
+Route::put('/admin/{id}', [AdminController::class, 'update'])->name('editar-usuario');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

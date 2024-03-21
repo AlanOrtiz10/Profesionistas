@@ -86,6 +86,8 @@ Route::delete('/recommendations/delete/{id}', [RecommendationController::class, 
 
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
 
 
 

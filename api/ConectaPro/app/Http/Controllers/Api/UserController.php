@@ -58,8 +58,8 @@ class UserController extends Controller
             'email' => 'required|string',
             'phone' => 'required|numeric',
             'password' => 'required|string',
-            'level_id' => 'required|string', // Agrega el campo nivel según tu estructura de base de datos
-            'image' => 'required|string', // Agrega el campo imagen según tu estructura de base de datos
+            'level_id' => 'nullable|string', // Hacer que level_id sea opcional
+            'image' => 'nullable|string', // Hacer que image sea opcional
         ]);
     
         // Encriptar la contraseña con bcrypt
@@ -71,8 +71,8 @@ class UserController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => $hashedPassword,
-            'level_id' => $data['level_id'], // Ajusta según el nombre real del campo
-            'image' => $data['image'], // Ajusta según el nombre real del campo
+            'level_id' => $data['level_id'], // Asignar null si no se proporciona
+            'image' => $data['image'], // Asignar null si no se proporciona
             // Otros campos según sea necesario
         ]);
     
@@ -89,6 +89,7 @@ class UserController extends Controller
             return response()->json($object);
         }
     }
+    
     
     
 

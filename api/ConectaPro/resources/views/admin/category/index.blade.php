@@ -17,7 +17,6 @@
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal">
                             <i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Usuario</span>
                         </button>
-                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>                        
                     </div>
                 </div>
             </div>

@@ -62,7 +62,6 @@
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addServiceModal">
                             <i class="material-icons">&#xE147;</i> <span>Agregar Nuevo Servicio</span>
                         </button>
-                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>                        
                     </div>
                 </div>
             </div>
@@ -108,6 +107,8 @@
         <a href="#" class="edit mr-3" data-toggle="modal" data-target="#editServiceModal" data-id="{{ $service['id'] }}" data-name="{{ $service['Nombre'] }}" data-description="{{ $service['Descripcion'] }}" data-category-id="{{ $service['ID_Categoria']['id'] }}" data-specialist-id="{{ $service['ID_Especialista']['id'] }}" data-image="{{ $service['Imagen'] }}" data-availability="{{ $service['Disponibilidad'] }}" data-specialist="{{ $service['ID_Especialista']['name'] }} {{ $service['ID_Especialista']['surname'] }}">
             <i class="material-icons" data-toggle="tooltip" title="Editar" style="font-size: 25px;">&#xE254;</i>
         </a>
+        @auth
+        @if(auth()->user()->level_id == 1)
         <form action="{{ route('admin.service.destroy', $service['id']) }}" method="POST" class="d-inline">
             @csrf
             @method('DELETE')
@@ -115,6 +116,8 @@
                 <i class="material-icons text-danger" data-toggle="tooltip" title="Eliminar" style="font-size: 25px;">delete</i>
             </button>
         </form>
+        @endif
+            @endauth
     </td>
 </tr>
 @endforeach

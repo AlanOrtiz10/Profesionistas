@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('status')->default('1')->
             after('password');
 
-            $table->integer('level_id')->default('1')->
+            $table->integer('level_id')->default('2')->
             after('status');
 
   
