@@ -104,9 +104,7 @@
                             <td>{{$user['Imagen']}}</td>
                             <td class="d-flex align-items-center">
                                 <!-- Acciones de edición y eliminación -->
-                                <a href="{{url('/users/' . $user['id'] . '/edit')}}" class="edit mr-3" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i>
-                                </a>
+                               
                                 <form action="{{ route('admin.users.destroy', $user['id']) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
