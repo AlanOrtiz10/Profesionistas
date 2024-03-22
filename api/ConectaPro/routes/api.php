@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\categoriesController as ApiCategoriesController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RecommendationController;
 use App\Http\Controllers\Api\recommendationsController;
 use App\Http\Controllers\Api\ServiceController;
@@ -87,6 +88,13 @@ Route::delete('/recommendations/delete/{id}', [RecommendationController::class, 
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+
+Route::get('/orders', [OrderController::class, 'list']);
+Route::get('/orders/{id}', [OrderController::class, 'item']);
+Route::post('/orders/create', [OrderController::class, 'create']);
+Route::post('/orders/update', [OrderController::class, 'update']);
+Route::delete('/orders/delete/{id}', [OrderController::class, 'delete']);
 
 
 

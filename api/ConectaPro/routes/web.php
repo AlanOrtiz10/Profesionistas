@@ -29,9 +29,9 @@ Route::get('/old', function () {
 });
 
 
-Route::get('/config', [PanelController::class, 'config'])->name('config');
-Route::get('/search', [PanelController::class, 'search'])->name('search');
 
+Route::get('/search', [PanelController::class, 'search'])->name('search');
+Route::get('/config', [PanelController::class, 'config'])->name('config');
 Route::put('/admin/{id}', [AdminController::class, 'update'])->name('editar-usuario');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
